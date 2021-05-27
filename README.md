@@ -1,3 +1,8 @@
 # buzzy
 TailwindCSS and AlpineJS template
-![Optional Text](img/buzzy/03.png)
+![KA Buzzy](buzzy.jpg)
+
+
+#demo
+
+[Demo](https://https://ka-studio.dev/demo/2021/ka-buzzy)
