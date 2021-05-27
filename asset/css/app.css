@@ -1,0 +1,14 @@
+/* ./resources/css/app.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* fonts */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Raleway:wght@400;600;700&display=swap');
+
+/* components */
+@import "./components/buttons.css";
+@import "./components/mobile-navigation.css";
+
+/* additional */
+@import "./additional.css"

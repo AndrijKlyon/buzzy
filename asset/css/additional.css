@@ -1,0 +1,13 @@
+.logo-icon {
+    filter: invert(94%) sepia(38%) saturate(6741%) hue-rotate(304deg) brightness(88%) contrast(78%);
+}
+
+/* splide */
+.splide__pagination__page.is-active {
+    @apply bg-accent1;
+}
+/* // splide */
+
+[x-cloak] {
+    display: none !important;
+}

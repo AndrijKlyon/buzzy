@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zxx">
+  <head>
+    <meta charset="UTF-8" />
+        <!-- Meta  -->
+        <meta name="description" content="KA Buzzy - business tailwindcss template" />
+        <meta name="keywords" content="web template, html/css template, free tailwindcss template" />
+        <meta name="author" content="KA Studio" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="img/buzzy/favicon.svg" />
+        <title>KA Buzzy</title>
+        <!-- // meta -->
+        <!-- Styles -->
+        <link rel="stylesheet" href="css/fontawesome.css"/>
+        <link rel="stylesheet" href="css/splide.min.css">
+        <link rel="stylesheet" href="css/app.css">
+        <!-- // styles -->
+  </head>
+  <body class="font-main"
+        :class="{ 'overflow-hidden': muted}"
+        x-data="{ muted: false }"
+        x-init="()=> { scrollTo( 0, 0 ); $dispatch('loaded') }"
+        x-cloak
+        @muted-body.window="{ if($event.detail == true) { muted = true } else { muted = false }}"
+        @open-menu.window="muted = $event.detail"
+	      @keydown.window.tab="usedKeyboard = true"
+	      @keydown.escape="{ muted = false; $dispatch('open-aside', false) }">
+       <!-- Muted layer -->
+        <div
+        x-show.transition.opacity.duration.500="muted"
+        @click="{ muted = false; $dispatch('open-aside', false)}"
+        class="fixed inset-0 z-50 bg-black bg-opacity-50"
+        >
+    </div>
+    <!-- // Muted layer -->
+
+    <!-- loader -->
+    <div x-data="{ loader:true }" @loaded.window="{ loader = false }"
+        x-show="loader"
+        x-transition:enter="transition linear"
+        x-transition:enter-start="opacity-100"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in delay-300 duration-1000 "
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed top-0 left-0 z-50 flex items-center justify-center w-screen h-screen text-gray-500 bg-white">
+            <!-- <div class="w-10 h-10 bg-black animate-spin"></div> -->
+            <div class="flex flex-col items-center animate-pulse">
+                <svg xmlns='http://www.w3.org/2000/svg' class='w-12 h-12 fill-current ionicon top-1/2 left-1/2'
+                    viewBox='0 0 512 512'>
+                    <path d='M288 464h-64a16 16 0 000 32h64a16 16 0 000-32zM304 416h-96a16 16 0 000 32h96a16 16 0 000-32zM369.42 62.69C339.35 32.58 299.07 16 256 16A159.62
+                    159.62 0 0096 176c0 46.62 17.87 90.23 49 119.64l4.36 4.09C167.37 316.57 192 339.64 192 360v24a16 16 0 0016 16h24a8 8 0 008-8V274.82a8 8 0 00-5.13-7.47A130.73
+                    130.73 0 01208.71 253a16 16 0 1118.58-26c7.4 5.24 21.65 13 28.71 13s21.31-7.78 28.73-13a16 16 0 0118.56 26 130.73 130.73 0 01-26.16 14.32 8 8 0 00-5.13
+                    7.47V392a8 8 0 008 8h24a16 16 0 0016-16v-24c0-19.88 24.36-42.93 42.15-59.77l4.91-4.66C399.08 265 416 223.61 416 176a159.16 159.16 0 00-46.58-113.31z'/>
+                </svg>
+                <div class="py-4">
+                    Loading... Please wait
+                </div>
+            </div>
+
+    </div>
+    <!-- // loader -->
+    <!-- Back to top -->
+    <div class="fixed z-50 flex items-center justify-center w-10 h-10 transition bg-black opacity-75 cursor-pointer bottom-8 right-8 hover:opacity-100"
+        @click="$scroll('body')"
+        x-data="{ scrolled:false }"
+        x-init=""
+        x-show="scrolled"
+        @scroll.window = "scrolled = (window.pageYOffset > 0.5*window.screen.height) ? true : false">
+        <i class="text-xl text-white fas fa-caret-up"></i>
+    </div>
+    <!-- // Back to top -->
+
+    <!-- Aside menu start -->
+    <div x-data="{ open:false, title:'Menu' }"
+            @open-aside.window="{ if($event.detail == true) { open = true } else { open = false }}"
+            class="fixed top-0 right-0 z-50 flex flex-col w-64 max-h-screen min-h-screen p-6 overflow-hidden transition duration-700 transform bg-white border border-gray-100 aside lg:hidden"
+            :class="{'translate-x-full': !open, 'translate-x-0': open, 'opacity-100': open, 'opacity-0': !open }">
+        <!-- aside header -->
+        <div class="flex items-center justify-between mb-6 aside__header">
+            <a href="#" class="aside__close" @click="{ open = false; $dispatch('muted-body', false) }">
+                <img src="img/icons/close-outline.svg" class="w-8 h-8" alt="">
+            </a>
+            <div class="text-xl font-medium uppercase font-heading text-accent1" x-text="title"></div>
+        </div>
+        <!-- // aside header -->
+        <!--  aside content -->
+        <div class="flex-grow overflow-auto leading-8 aside__content overscroll-x-none"
+            x-data = "{ menu: 'menu' }"
+            @mobile-menu-init.window="{ menu = $event.detail.menu }"
+            x-html="menu">
+        </div>
+        <!-- // aside content -->
+        <!--  aside footer -->
+        <div class="aside__footer"></div>
+        </div>
+        <!-- // aside footer -->
+    <!-- Aside menu end -->
+
+    <header>
+
+      <!-- navigation -->
+      <nav class="container flex items-center justify-between px-6 py-6 mx-auto">
+            <!-- logo -->
+            <a class="relative flex items-center" href="index.html">
+                <svg xmlns='http://www.w3.org/2000/svg' class='w-8 h-8 fill-current text-accent1 ionicon' viewBox='0 0 512 512'>
+                    <path d='M288 464h-64a16 16 0 000 32h64a16 16 0 000-32zM304 416h-96a16 16 0 000 32h96a16 16 0 000-32zM369.42 62.69C339.35 32.58 299.07 16 256 16A159.62
+                    159.62 0 0096 176c0 46.62 17.87 90.23 49 119.64l4.36 4.09C167.37 316.57 192 339.64 192 360v24a16 16 0 0016 16h24a8 8 0 008-8V274.82a8 8 0 00-5.13-7.47A130.73
+                    130.73 0 01208.71 253a16 16 0 1118.58-26c7.4 5.24 21.65 13 28.71 13s21.31-7.78 28.73-13a16 16 0 0118.56 26 130.73 130.73 0 01-26.16 14.32 8 8 0 00-5.13
+                     7.47V392a8 8 0 008 8h24a16 16 0 0016-16v-24c0-19.88 24.36-42.93 42.15-59.77l4.91-4.66C399.08 265 416 223.61 416 176a159.16 159.16 0 00-46.58-113.31z'/>
+                </svg>
+                <h1 class="mr-3 text-3xl font-bold text-black capitalize">Buzzy</h1>
+                <div class="absolute right-0 w-2 h-2 align-bottom rounded-full bottom-2 bg-accent1"></div>
+            </a>
+            <!-- //logo -->
+            <!-- navbar -->
+            <div class="hidden lg:block" x-data x-init="$dispatch('mobile-menu-init', { menu: $el.innerHTML })">
+                <ul class="flex flex-col text-lg font-semibold leading-8 capitalize lg:flex-row lg:justify-center">
+                    <li class="relative group">
+                        <a class="px-4 lg:py-7 text-accent1" href="index.html">Home</a>
+                    </li>
+                    <li class="relative group">
+                        <a class="px-4 lg:py-7 group-hover:text-accent1" href="services.html">Services</a>
+                    </li>
+                    <li x-data = "{ opened: false }"
+                        class="relative group"  >
+                        <a class="px-4 lg:py-7 group-hover:text-accent1" href="#"
+                            @click.prevent="{ if(!opened && !$screen('lg'))
+                                                { $refs.dropdown.style.height = $refs.dropdown.scrollHeight + 'px' }
+                                              else if(opened && !$screen('lg'))
+                                                { $refs.dropdown.style.height = 0 };
+                                            opened = !opened;
+                                            }">
+                            Pages
+                            <i class="inline-block text-sm transition duration-300 transform fas fa-chevron-down"
+                              :class="{'rotate-0': !opened && !$screen('lg'), 'rotate-180': opened && !$screen('lg'),
+                                        'group-hover:rotate-180':$screen('lg')
+                                        }"></i>
+                      </a>
+                      <div :class = "{'h-0': !opened }"
+                      class="absolute invisible w-0 duration-500 ease-in-out transform -translate-x-1/2 lg:visible -bottom-2 left-1/2 group-hover:w-full"></div>
+                      <ul x-ref="dropdown" class="relative left-0 z-10 h-0 px-6 overflow-hidden text-sm leading-8 text-left capitalize duration-500 ease-in-out transform bg-white opacity-100 top-2 group-hover:visible lg:group-hover:transform group-hover:translate-y-0 lg:h-auto lg:py-2 lg:w-32 lg:border-t-2 lg:border-accent1 lg:shadow-2xl lg:translate-y-8 lg:invisible lg:opacity-0 lg:absolute lg:top-12 lg:group-hover:opacity-100"
+                            :class="{ 'transform -translate-y-2':opened }">
+                        <li><a class="pl-6 lg:pl-0 hover:text-accent1" href="team.html" >Our team</a></li>
+                        <li><a class="pl-6 lg:pl-0 hover:text-accent1" href="portfolio.html" >Portfolio</a></li>
+                        <li><a class="pl-6 lg:pl-0 hover:text-accent1" href="blog-detail.html" >Blog Detail</a></li>
+                      </ul>
+                    </li>
+                    <li class="relative group">
+                      <a class="px-4 lg:py-7 group-hover:text-accent1" href="blog.html">Blog</a>
+                    </li>
+                    <li class="relative group">
+                        <a class="px-4 lg:py-7 group-hover:text-accent1" href="about.html">About</a>
+                      </li>
+                    <li class="relative group">
+                      <a class="px-4" :class="{ 'btn btn--primary group-hover:text-white ml-2':$screen('lg'), 'group-hover:text-accent1':$screen('xs') && !$screen('lg') }" href="contact.html">Contact</a>
+                    </li>
+                  </ul>
+                </div>
+                <!--  // navbar -->
+            <!-- burger -->
+            <a x-data href="#" x-show="!$screen('lg')" @click="{ $dispatch('open-aside', true); $dispatch('muted-body', true) }">
+                <svg xmlns='http://www.w3.org/2000/svg' class='w-10 h-10 fill-current ionicon' viewBox='0 0 512 512'>
+                    <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-miterlimit='10' stroke-width='32' d='M80 160h352M80 256h352M80 352h352'/>
+                </svg>
+            </a>
+            <!-- // burger -->
+      </nav>
+      <!-- // navigation -->
+    </header>
+    <main>
+        <!-- splide -->
+        <div x-data="{
+            splide:null,
+            activeSlide:0,
+            slides: [
+             { 'id': 1, 'title': 'Welcome to Buzzy!', 'subtitle': 'We are creative digital agency', 'text': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit magni necessitatibus pariatur ex!', 'img': '16.png' },
+             { 'id': 2, 'title': 'Your robust partner', 'subtitle': 'We are professionals in digital business!', 'text': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit magni necessitatibus pariatur ex!', 'img': '03.png' }
+            ]
+        }"
+        x-init="()=> {splide = new Splide($refs.splide,
+                            { perPage: 1,
+                                height: '500px',
+                                rewind : true,
+                                arrows: false,
+                                classes: {
+                                    'page': 'splide__pagination__page bg-gray-500 h-3 w-3 mx-2 mb-4',
+                                },
+                                breakpoints: {
+                                    768: {
+
+                                    },
+                                }
+                            }).mount();
+                            splide.on( 'move', function() {
+                                activeSlide = splide.index
+                            } );
+                        }">
+            <div class="w-full overflow-x-hidden overflow-y-hidden splide" x-ref="splide">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <template x-for="(item, index, collection) in slides" :key="item.id">
+                            <li class="relative w-full splide__slide">
+                            <div class="container relative flex items-center justify-center h-full mx-auto">
+                                <div class="relative z-20 flex flex-col justify-center w-full px-6 md:w-1/2"
+                                    x-show="activeSlide == item.id - 1"
+                                    x-transition:enter="transition ease-out duration-700 delay-500"
+                                    x-transition:enter-start="opacity-0 transform scale-50"
+                                    x-transition:enter-end="opacity-100 transform scale-100"
+                                    x-transition:leave="transition ease-in duration-700"
+                                    x-transition:leave-start="opacity-100 transform scale-100"
+                                    x-transition:leave-end="opacity-0 transform scale-50">
+                                    <p class="mb-5 text-xl font-semibold capitalize text-accent1" x-text="item.title"></p>
+                                    <h2 class="text-3xl font-bold font-heading md:text-4xl xl:text-6xl" x-text="item.subtitle"></h2>
+                                    <p class="max-w-md pt-5 text-lg text-gray-700" x-text="item.text"></p>
+                                    <a href="#" class="self-start mt-12 btn btn--primary">More info</a>
+                                </div>
+                                <div class="absolute top-0 right-0 transform translate-x-1/2 lg:translate-x-0 opacity-40 lg:relative lg:opacity-100 lg:block lg:w-1/2">
+                                    <img :src="'img/buzzy/' + item.img" alt="" class="object-cover w-full h-full">
+                                </div>
+                            </div>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- // splide -->
+        <!-- features  -->
+        <section x-data="{
+                scrolled:false,
+                repeat:false,
+                features: [
+                    { 'id':1, 'icon':'far fa-user', 'title':'Individual approach', 'desc':'Laborum mollit veniam excepteur velit', 'link':'#' },
+                    { 'id':2, 'icon':'far fa-clock', 'title':'24/7 Support', 'desc':'Reprehenderit ex ipsum cillum cupidatat ipsum cillum magna dolore', 'link':'#' },
+                    { 'id':3, 'icon':'far fa-credit-card', 'title':'Money back', 'desc':'Cupidatat Lorem magna dolore cillum ipsum eiusmod', 'link':'#' },
+                ]
+            }"
+            x-init="()=>{ $watch('scrolled', value => { repeat = repeat == false ? true : false } ) }"
+            @scroll.window = "scrolled = (window.pageYOffset > $el.getBoundingClientRect().top + window.scrollY - window.screen.height/3) ? true : repeat"
+            class="container flex flex-wrap py-10 mx-auto"
+        >
+            <template x-for="(item, index, collection) in features" :key="index">
+                <div class="self-stretch w-full p-4 lg:w-1/3 group"
+                    x-show="scrolled"
+                    x-transition:enter="transition ease-out duration-700 delay-500"
+                    x-transition:enter-start="opacity-10 transform scale-50"
+                    x-transition:enter-end="opacity-100 transform scale-100"
+                    x-transition:leave="transition ease-in duration-700"
+                    x-transition:leave-start="opacity-100 transform scale-100"
+                    x-transition:leave-end="opacity-10 transform scale-50"
+                >
+                    <div class="relative flex flex-col h-full p-8 transition rounded shadow-lg group-hover:shadow-2xl">
+                        <i class="pb-4 text-6xl text-accent1" :class="item.icon"></i>
+                        <h4 class="pb-2 text-2xl font-bold capitalize font-heading group-hover:text-accent1" x-text="item.title"></h4>
+                        <p class="pb-4 mb-auto text-gray-500" x-text="item.desc"></p>
+                        <a :href="item.link" class="bottom-0 w-full font-semibold capitalize bg-white shadow-2xl lg:left-0 lg:z-20 lg:hidden lg:h-14 lg:px-8 lg:py-4 lg:transform lg:translate-y-4 lg:absolute text-accent1 lg:group-hover:block">Read more</a>
+                    </div>
+                </div>
+            </template>
+        </section>
+        <!-- // features -->
+        <!-- about -->
+        <section class="container flex flex-col py-10 mx-auto lg:flex-row">
+            <div class="w-full px-12 text-center lg:w-1/2">
+                <img src="img/buzzy/10.png" class="object-cover" alt="">
+            </div>
+            <div class="w-full px-6 lg:w-1/2">
+                <p class="text-xl text-accent1">About us</p>
+                <h3 class="pb-6 text-3xl font-bold md:text-5xl font-heading">Your robust business partner</h3>
+                <p class="pb-4 text-gray-500">Voluptate quis do sit mollit sit commodo eu voluptate ullamco mollit sit tempor ad. Cupidatat voluptate dolore ipsum laboris velit ex Lorem nostrud
+                    ullamco culpa elit et Lorem cillum. Commodo deserunt velit ad anim sint qui. Sit sit consequat sunt officia duis enim Lorem consectetur sit
+                    sit commodo velit magna.
+                </p>
+                <ul class="pl-6 leading-8 text-gray-500 list-none">
+                    <li><i class="mr-4 text-sm fas fa-circle text-accent1"></i>Voluptate cillum aliqua labore Lorem esse ea laborum</li>
+                    <li><i class="mr-4 text-sm fas fa-circle text-accent1"></i>Ut aliqua cillum enim excepteur veniam adipisicing aliqua quis sint occaecat labore</li>
+                    <li><i class="mr-4 text-sm fas fa-circle text-accent1"></i>Ipsum magna velit voluptate Lorem ea commodo eu ut esse exercitation duis labore Lorem</li>
+                    <li><i class="mr-4 text-sm fas fa-circle text-accent1"></i>Elit consectetur sunt excepteur veniam</li>
+                    <li><i class="mr-4 text-sm fas fa-circle text-accent1"></i>Laboris aliqua culpa exercitation ipsum cupidatat mollit est nostrud anim ea nostrud qui</li>
+                </ul>
+            </div>
+        </section>
+        <!-- // about -->
+        <!-- services -->
+        <section x-data="{
+            scrolled:false,
+            repeat:false,
+            services: [
+                    { 'id':1, 'icon':'far fa-image', 'title':'Graphic design', 'desc':'Laborum mollit veniam excepteur velit', 'link':'#' },
+                    { 'id':2, 'icon':'fas fa-desktop', 'title':'Development', 'desc':'Reprehenderit ex ipsum cillum cupidatat ipsum cillum magna dolore', 'link':'#' },
+                    { 'id':3, 'icon':'far fa-copyright', 'title':'Branding', 'desc':'Fugiat adipisicing labore labore excepteur culpa do', 'link':'#' },
+                    { 'id':3, 'icon':'fas fa-search', 'title':'SEO Optimization', 'desc':'Cupidatat Lorem magna dolore cillum ipsum eiusmod', 'link':'#' }
+            ] }"
+            class="container flex flex-col py-10 mx-auto lg:flex-row"
+            x-init="()=>{ $watch('scrolled', value => { repeat = repeat == false ? true : false } ) }"
+            @scroll.window = "scrolled = (window.pageYOffset > $el.getBoundingClientRect().top + window.scrollY - window.screen.height/3) ? true : repeat"
+            >
+            <div class="w-full px-6 pb-8 lg:w-1/2 lg:pb-0">
+                <p class="text-xl text-accent1">Our services</p>
+                <h3 class="pb-6 text-3xl font-bold md:text-5xl font-heading">What we are offer for you</h3>
+                <p class="pb-4 text-gray-500">Voluptate quis do sit mollit sit commodo eu voluptate ullamco mollit sit tempor ad. Cupidatat voluptate dolore ipsum laboris velit ex Lorem nostrud
+                    ullamco culpa elit et Lorem cillum. Commodo deserunt velit ad anim sint qui. Sit sit consequat sunt officia duis enim Lorem consectetur sit
+                    sit commodo velit magna.
+                </p>
+                <p class="pb-8 text-gray-500">Eu duis proident dolor elit ex. Enim aliqua exercitation officia sunt quis ullamco amet do nisi fugiat elit.
+                    Et ea consequat qui commodo amet ullamco excepteur culpa ex.</p>
+                <a href="#" class="self-start mt-12 btn btn--primary">More info</a>
+            </div>
+            <div class="flex flex-wrap w-full px-6 lg:w-1/2">
+                <template x-for="(item, index, collection) in services" :key="index">
+                    <div class="self-stretch w-full p-4 md:w-1/2" :class="{ 'transform translate-y-4':$screen('lg') && index%2!=0 }"
+                        x-show="scrolled"
+                        x-transition:enter="transition ease-out duration-700 delay-500"
+                        x-transition:enter-start="opacity-10 transform scale-50"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-700"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-10 transform scale-50"
+                    >
+                        <div class="flex flex-col items-center w-full h-full p-8 shadow-lg group hover:shadow-2xl">
+                            <i class="flex items-center justify-center w-16 h-16 mb-2 text-2xl text-white rounded-full bg-accent1" :class="item.icon"></i>
+                            <a :href="item.link" class="group-hover:text-accent1">
+                                <h3 class="pb-2 text-xl font-bold md:text-2xl font-heading" x-text="item.title"></h3>
+                            </a>
+                            <p class="pb-4 text-gray-500" x-text="item.desc"></p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </section>
+        <!-- // services -->
+        <!-- contact -->
+        <section class="container mx-auto">
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full px-12 text-center lg:w-1/2">
+                    <img src="img/buzzy/14.png" class="object-cover" alt="">
+                </div>
+                <div class="w-full px-6 py-10 lg:w-1/2">
+                    <p class="text-xl text-accent1">Contact us</p>
+                    <h3 class="pb-6 text-3xl font-bold md:text-5xl font-heading">Get in touch</h3>
+                    <p class="pb-10">Have any questions? Please, feel free to contact us</p>
+                    <form action="#" class="flex flex-col">
+                        <input type="text" placeholder="Name" class="p-2 mb-2 border border-gray-300 rounded outline-none focus:border-gray-500">
+                        <input type="text" placeholder="Email" class="p-2 mb-2 border border-gray-300 rounded outline-none focus:border-gray-500">
+                        <input type="text" placeholder="Subject" class="p-2 mb-2 border border-gray-300 rounded outline-none focus:border-gray-500">
+                        <textarea name="message" id="" cols="30" rows="10" placeholder="Message" class="h-24 p-2 mb-2 border border-gray-300 rounded outline-none focus:border-gray-500"></textarea>
+                        <button class="self-start btn btn--primary">Send message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <!-- // contact -->
+        <!-- pricing -->
+        <section class="container py-10 mx-auto"
+                x-data="{
+                    scrolled:false,
+                    repeat:false,
+                    pricing: [
+                        {'id':1, 'title':'Basic', 'price':99,
+                            features: [
+                                'Ad consectetur non aute velit ex',
+                                'Ullamco nulla ad qui proident quis',
+                                'Dolore cupidatat mollit consectetur',
+                                'Irure reprehenderit laboris consequat',
+                                'Proident excepteur ullamco pariatur',
+                                'Voluptate dolore aliquip in irure',
+                                'Dolor et tempor mollit aliquip occaecat'
+                            ]
+                        },
+                        {'id':2, 'title':'Standard', 'price':199,
+                            features: [
+                                'Ad consectetur non aute velit ex',
+                                'Ullamco nulla ad qui proident quis',
+                                'Dolore cupidatat mollit consectetur',
+                                'Irure reprehenderit laboris consequat',
+                                'Proident excepteur ullamco pariatur',
+                                'Voluptate dolore aliquip in irure',
+                                'Dolor et tempor mollit aliquip occaecat'
+                            ]
+                        },
+                        {'id':3, 'title':'Premium', 'price':299,
+                            features: [
+                                'Ad consectetur non aute velit ex',
+                                'Ullamco nulla ad qui proident quis',
+                                'Dolore cupidatat mollit consectetur',
+                                'Irure reprehenderit laboris consequat',
+                                'Proident excepteur ullamco pariatur',
+                                'Voluptate dolore aliquip in irure',
+                                'Dolor et tempor mollit aliquip occaecat'
+                            ]
+                        }
+                    ]
+                }"
+                x-init="()=>{ $watch('scrolled', value => { repeat = repeat == false ? true : false } ) }"
+                @scroll.window = "scrolled = (window.pageYOffset > $el.getBoundingClientRect().top + window.scrollY - window.screen.height/3) ? true : repeat"
+                >
+                <div class="text-center">
+                    <p class="text-xl text-accent1">Our pricing</p>
+                    <h3 class="pb-6 text-3xl font-bold md:text-5xl font-heading">Proposed packages</h3>
+                    <p class="pb-10">Choose prising plan accoding to yor need</p>
+                </div>
+                <div class="flex flex-wrap">
+                    <template x-for="(item, index, collection) in pricing" :key="item.id">
+                        <div class="w-full px-6 mb-6 lg:w-1/3 lg:mb-0">
+                            <div class="w-full p-6 shadow-lg group hover:shadow-2xl"
+                                x-show="scrolled"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 transform scale-50"
+                                x-transition:enter-end="opacity-100 transform scale-100"
+                                x-transition:leave="transition ease-in duration-300"
+                                x-transition:leave-start="opacity-100 transform scale-100"
+                                x-transition:leave-end="opacity-0 transform scale-50">
+                                <div class="flex flex-col items-center justify-center h-full text-center">
+                                    <div class="w-full p-8">
+                                        <h5 class="pb-2 text-3xl font-bold font-heading" x-text="item.title"></h5>
+                                        <p class="flex justify-center text-xl text-accent1">
+                                            <span class="pt-1 mr-1">$</span>
+                                            <span class="text-5xl font-bold font-heading" x-text="item.price"></span>
+                                            <span class="self-end text-gray-500">/ month</span>
+                                        </p>
+                                    </div>
+                                    <ul class="w-full text-gray-500 list-none">
+                                        <template x-for="feature in item.features">
+                                            <li class="px-6 py-4" x-text="feature"></li>
+                                        </template>
+                                    </ul>
+                                    <div class="w-full py-5 mt-auto">
+                                        <button class="btn btn--transparent">buy now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </template>
+                </div>
+        </section>
+        <!-- // pricing -->
+        <!-- testimonials -->
+        <section class="py-10 bg-accent3" id="testimonials">
+            <div class="text-center">
+                <p class="text-xl capitalize text-accent1">clients testimonials</p>
+                <h3 class="pb-6 text-3xl font-bold capitalize md:text-5xl font-heading">our clients trust us</h3>
+            </div>
+             <!-- splide -->
+        <div x-data="{ splide:null,
+                        activeSlide:0,
+                        testimonials: [
+                            {   'id':1,
+                                'name':'Dave Robinson',
+                                'position':'Gallery Design, CEO',
+                                'img':'user_02.jpg',
+                                'text':`Lorem ipsum dolor sit amet, consectetur adipisicing elit magni necessitatibus pariatur ex!
+                                        Pariatur eiusmod laboris ipsum labore. Cillum aliquip est labore nostrud cillum est pariatur magna qui ad.
+                                        Sit laboris ullamco sint aute.`
+                            },
+                            {   'id':2,
+                                'name':'Lara Palner',
+                                'position':'ColorPix, Director',
+                                'img':'user_04.jpg',
+                                'text':`Lorem ipsum dolor sit amet, consectetur adipisicing elit magni necessitatibus pariatur ex!
+                                        Pariatur eiusmod laboris ipsum labore. Cillum aliquip est labore nostrud cillum est pariatur magna qui ad.`
+                            },
+                            {   'id':3,
+                                'name':'Christina Power',
+                                'position':'NY company, CEO',
+                                'img':'user_05.jpg',
+                                'text':`Id eu elit elit amet nostrud incididunt culpa minim nisi cupidatat Lorem id minim. Laborum veniam commodo cillum proident aute
+                                minim in nulla adipisicing dolore eu laborum occaecat exercitation. Officia ut culpa Lorem qui velit ipsum pariatur excepteur cupidatat ipsum.`
+                            },
+                            {   'id':4,
+                                'name':'Mark Smiley',
+                                'position':'EastWest Company, PM',
+                                'img':'user_06.jpg',
+                                'text':`Lorem ipsum dolor sit amet, consectetur adipisicing elit magni necessitatibus pariatur ex!
+                                        Pariatur eiusmod laboris ipsum labore. Cillum aliquip est labore nostrud cillum est pariatur magna qui ad.
+                                        Sit laboris ullamco sint aute.`
+                            }
+                        ]
+                    }"
+            class="container mx-auto"
+            x-init="()=> {feedbackSplide = new Splide($refs.feedback,
+                                { perPage: 3,
+                                    height: '450px',
+                                    rewind : true,
+                                    arrows: false,
+                                    pagination: true,
+                                    classes: {
+                                        'pagination': 'splide__pagination -mb-4 relative z-20',
+                                        'page': 'splide__pagination__page bg-black h-3 w-3 mx-2 ',
+                                        'arrow': 'splide__arrow w-10 h-10 rounded'
+                                    },
+                                    breakpoints: {
+                                        1280: {
+                                            height: '500px'
+                                        },
+                                        1024: {
+                                            height: '450px',
+                                            perPage: 2,
+                                        },
+                                        768: {
+                                            height: '450px',
+                                            perPage: 1
+                                        }
+                                    }
+                                }).mount();
+                                feedbackSplide.on( 'move', function() {
+                                    activeSlide = feedbackSplide.index
+                                } );
+                            }">
+                <div class="w-full overflow-x-hidden overflow-y-hidden splide" x-ref="feedback">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+
+                            <template x-for="(item, index, collection) in testimonials" :key="item.id">
+                                <li class="p-6 py-8 splide__slide">
+                                    <div class="relative flex flex-col items-center justify-start h-full p-6 mx-auto text-center shadow-lg group hover:shadow-xl">
+                                            <p class="pb-6 mb-auto text-gray-500">
+                                                <i class="text-sm text-gray-300 fas fa-quote-left"></i>
+                                               <span x-text="item.text"></span>
+                                                <i class="text-sm text-gray-300 fas fa-quote-right"></i>
+                                            </p>
+                                            <img :src="'img/users/' + item.img" alt="" class="w-16 h-16 border-2 border-white rounded-full filter grayscale">
+                                            <p class="pt-2 text-lg font-bold font-heading" x-text="item.name"></p>
+                                            <p class="text-gray-500 capitalize" x-text="item.position"></p>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- // testimonials -->
+        <!-- subscribe -->
+        <section class="container py-10 mx-auto">
+            <div class="flex flex-col lg:flex-row">
+                <div class="order-last w-full px-6 py-10 lg:w-1/2 lg:order-first">
+                    <p class="text-xl capitalize text-accent1">Subscribe us</p>
+                    <h3 class="pb-6 text-3xl font-bold md:text-5xl font-heading">Subscribe to our newsletter</h3>
+                    <p class="pb-10">Et dolore commodo incididunt irure ut est incididunt Consectetur voluptate in aute adipisicing irure minim ad commodo.</p>
+                    <form action="#" class="flex flex-col lg:flex-row">
+                        <input type="text" placeholder="Email" class="flex-grow p-2 mb-2 border border-gray-300 rounded outline-none focus:border-gray-500">
+                        <button class="self-start mb-2 lg:ml-2 btn btn--primary">Subscribe</button>
+                    </form>
+                </div>
+                <div class="order-first w-full px-12 text-center lg:w-1/2 lg:order-last">
+                    <img src="img/buzzy/07.png" class="object-cover" alt="">
+                </div>
+            </div>
+        </section>
+        <!-- // subscribe -->
+        <!-- blog -->
+        <section class="container mx-auto"
+            x-data="{
+                scrolled:false,
+                repeat:false,
+                posts: [
+                    { 'id':1,
+                    'title':'Quis ullamco nulla ullamco deserunt',
+                    'author':'Admin',
+                    'date':'May 24, 2021',
+                    'img':'01.jpg',
+                    'desc':`Labore amet culpa dolor laborum commodo excepteur consectetur ut elit duis esse aute consectetur deserunt.
+                    Pariatur dolore irure sint dolor laborum in anim qui cillum aliquip enim magna excepteur.` },
+                    { 'id':2,
+                    'title':'Excepteur do officia quis velit reprehenderit aliquip',
+                    'author':'Admin',
+                    'date':'May 15, 2021',
+                    'img':'05.jpg',
+                    'desc':`Irure ad irure laborum ipsum laborum labore tempor
+                    deserunt commodo consequat amet consectetur. Adipisicing adipisicing voluptate cupidatat qui tempor sint ut sint veniam cupidatat laboris
+                    voluptate reprehenderit.` },
+                    { 'id':3,
+                    'title':'Quis ullamco nulla ullamco deserunt',
+                    'author':'Admin',
+                    'date':'May 11, 2021',
+                    'img':'11.jpg',
+                    'desc':`Adipisicing adipisicing voluptate cupidatat qui tempor sint ut sint veniam cupidatat laboris
+                    voluptate reprehenderit. Labore amet culpa dolor laborum commodo excepteur consectetur ut elit ` }
+            ] }"
+            x-init="()=>{ $watch('scrolled', value => { repeat = repeat == false ? true : false } ) }"
+            @scroll.window = "scrolled = (window.pageYOffset > $el.getBoundingClientRect().top + window.scrollY - window.screen.height/3) ? true : repeat"
+            >
+            <div class="text-center">
+                <p class="text-xl capitalize text-accent1">our blog</p>
+                <h3 class="pb-6 text-3xl font-bold capitalize md:text-5xl font-heading">last news</h3>
+            </div>
+            <div class="flex flex-wrap">
+                <template x-for="(item, index, collection) in posts" :key="index">
+                    <div class="flex flex-col w-full p-6 lg:w-1/3 group"
+                        x-show="scrolled"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform scale-50"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-300"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-50"
+                    >
+                        <img :src="'img/buzzy/posts/' + item.img" alt="" class="object-cover w-full h-64 filter grayscale group-hover:grayscale-0">
+                        <div class="flex py-2 text-gray-500">
+                            <div class="mr-2"><i class="mr-1 far fa-user"></i>Admin</div>
+                            <div class="mr-2"><i class="mr-1 far fa-calendar"></i>May 26, 2021</div>
+                            <div class="mr-2"><i class="mr-1 far fa-comments"></i>8 Comments</div>
+                        </div>
+                        <a href="#" class="text-2xl font-bold font-heading group-hover:text-accent1" x-text="item.title"></a>
+                        <p class="pt-2 text-gray-500" x-text="item.desc"></p>
+                    </div>
+                </template>
+            </div>
+        </section>
+        <!--  // blog -->
+         <!-- clients -->
+         <section class="py-10" id="clients">
+            <div class="container mx-auto">
+                <div x-data="{
+                        compabies:null,
+                        activeSlide:0,
+                        clients: [
+                        { 'id':1, 'title':'Static strategy', 'desc':'lawers company', 'icon':'fas fa-balance-scale' },
+                        { 'id':2, 'title':'Sea Limited', 'desc':'logistic company', 'icon':'fas fa-anchor' },
+                        { 'id':3, 'title':'Intersect', 'desc':'lawers company', 'icon':'fas fa-balance-scale-left' },
+                        { 'id':4, 'title':'Newline', 'desc':'logistic company', 'icon':'fab fa-avianex' },
+                        { 'id':5, 'title':'WashCat', 'desc':'clining company', 'icon':'fas fa-cat' },
+                        { 'id':6, 'title':'CarProp', 'desc':'lising company', 'icon':'fas fa-car' }
+                    ] }"
+                    class=""
+                    x-init="()=> {companies = new Splide($refs.companies,
+                                        { perPage: 4,
+                                            height: '120px',
+                                            rewind : true,
+                                            arrows: false,
+                                            cover: true,
+                                            classes: {
+                                                'pagination': 'splide__pagination -mb-4 relative z-20',
+                                                'page': 'splide__pagination__page bg-gray-500 h-3 w-3 mx-2',
+                                            },
+                                            breakpoints: {
+                                                1024: {
+                                                   perPage: 2,
+                                                },
+                                                640: {
+                                                    perPage: 1,
+                                                }
+                                            }
+                                        }).mount();
+                                        companies.on( 'move', function() {
+                                            activeSlide = splide.index
+                                        } );
+                                    }">
+                        <div class="w-full overflow-x-hidden overflow-y-hidden splide" x-ref="companies">
+                            <div class="py-12 splide__track">
+                                <ul class="text-gray-500 splide__list">
+                                    <template x-for="(item, index, collection) in clients" :key="item.id">
+                                        <li class="relative flex flex-col items-center justify-center w-full transition splide__slide hover:text-accent1">
+                                            <i class="pb-3 text-6xl" :class="item.icon"></i>
+                                            <h6 class="text-2xl uppercase font-heading" x-text="item.title"></h6>
+                                            <p class="capitalize" x-text="item.desc"></p>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </section>
+        <!-- // clients -->
+
+    </main>
+    <footer class="flex flex-col">
+        <div class="pb-10 bg-gray-900 pt-14">
+            <div class="container flex flex-wrap mx-auto text-gray-500">
+                <div class="w-full px-4 pb-6 md:w-1/2 xl:w-1/4">
+                    <!-- logo -->
+                    <div class="flex">
+                        <a class="relative flex items-center justify-start text-white" href="index.html">
+                            <svg xmlns='http://www.w3.org/2000/svg' class='w-8 h-8 fill-current ionicon' viewBox='0 0 512 512'>
+                                <path d='M288 464h-64a16 16 0 000 32h64a16 16 0 000-32zM304 416h-96a16 16 0 000 32h96a16 16 0 000-32zM369.42 62.69C339.35 32.58 299.07 16 256 16A159.62
+                                159.62 0 0096 176c0 46.62 17.87 90.23 49 119.64l4.36 4.09C167.37 316.57 192 339.64 192 360v24a16 16 0 0016 16h24a8 8 0 008-8V274.82a8 8 0 00-5.13-7.47A130.73
+                                130.73 0 01208.71 253a16 16 0 1118.58-26c7.4 5.24 21.65 13 28.71 13s21.31-7.78 28.73-13a16 16 0 0118.56 26 130.73 130.73 0 01-26.16 14.32 8 8 0 00-5.13
+                                7.47V392a8 8 0 008 8h24a16 16 0 0016-16v-24c0-19.88 24.36-42.93 42.15-59.77l4.91-4.66C399.08 265 416 223.61 416 176a159.16 159.16 0 00-46.58-113.31z'/>
+                            </svg>
+                            <h1 class="mr-3 text-3xl font-bold capitalize">Buzzy</h1>
+                            <div class="absolute right-0 w-2 h-2 align-bottom bg-white rounded-full bottom-2"></div>
+                        </a>
+                    </div>
+                    <!-- //logo -->
+                    <p class="pt-6 pb-4">Dolore culpa veniam sunt culpa sit aliquip eiusmod duis mollit ea nulla.</p>
+                    <ul class="leading-8 list-none">
+                        <li><i class="mr-2 fas fa-map-marker-alt"></i>Brooklin av, 124, office 258, 12458, NY</li>
+                        <li><i class="mr-2 fas fa-phone"></i>+10 (123) 456-78-02</li>
+                        <li><i class="mr-2 fas fa-phone"></i>+10 (123) 456-78-04</li>
+                        <li><i class="mr-2 far fa-envelope"></i>mailbox@buzzy.com</li>
+                    </ul>
+                </div>
+                <div class="w-full px-4 pb-6 md:w-1/2 xl:w-1/4">
+                    <div class="pb-6 text-2xl text-white capitalize font-heading">Useful links</div>
+                    <ul class="leading-8 list-none">
+                        <li><a class="capitalize hover:text-white" href="#">About us</a></li>
+                        <li><a class="capitalize hover:text-white" href="#">Our services</a></li>
+                        <li><a class="capitalize hover:text-white" href="#">Our cases</a></li>
+                        <li><a class="capitalize hover:text-white" href="#">Our team</a></li>
+                        <li><a class="capitalize hover:text-white" href="#">Contact</a></li>
+                        <li><a class="capitalize hover:text-white" href="#">Terms</a></li>
+                    </ul>
+                </div>
+                <div class="px-4 pb-6 w-fiull md:w-1/2 xl:w-1/4">
+                    <div class="pb-6 text-2xl text-white capitalize font-heading">Services</div>
+                    <ul class="leading-8 list-none">
+                        <li><a class="capitalize hover:text-white" href="#">UI/UX Design</a></li>
+                        <li><a class="capitalize hover:text-white" href="#">Graphic Design</a></li>
+                        <li><a class="capitalize hover:text-white" href="#">Branding</a></li>
+                        <li><a class="capitalize hover:text-white" href="#">Development</a></li>
+                        <li><a class="capitalize hover:text-white" href="#">SEO Optimization</a></li>
+                        <li><a class="capitalize hover:text-white" href="#">Marketing reseach</a></li>
+                    </ul>
+                </div>
+                <div class="w-full px-4 pb-6 md:w-1/2 xl:w-1/4">
+                    <div class="pb-6 text-2xl text-white capitalize font-heading">Stay with us</div>
+                    <p class="pb-4">Subscribe to our newsletter</p>
+                    <form action="#" class="flex w-full">
+                        <input type="text" class="w-full p-2" placeholder="Yor email">
+                        <button class="p-2 px-4 bg-accent1"><i class="text-white fas fa-hand-pointer"></i></button>
+                    </form>
+                    <p class="pt-4">We in social</p>
+                    <div class="flex items-center pt-4 pb-6">
+                        <a class="hover:text-white" href="#"><i class="flex items-center justify-center w-10 h-10 mr-4 border rounded-full fab fa-facebook-f"></i></a>
+                        <a class="hover:text-white" href="#"><i class="flex items-center justify-center w-10 h-10 mr-4 border rounded-full fab fa-twitter"></i></a>
+                        <a class="hover:text-white" href="#"><i class="flex items-center justify-center w-10 h-10 mr-4 border rounded-full fab fa-instagram"></i></a>
+                        <a class="hover:text-white" href="#"><i class="flex items-center justify-center w-10 h-10 mr-4 border rounded-full fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-accent2">
+            <div x-data="" class="py-8 text-center text-gray-300">
+                <!-- Link back to KA Studio can't be removed. Template is licensed under CC BY 3.0. -->
+                <span>Copyright &copy;<span class="current__year" x-html="new Date().getFullYear()"></span> All rights reserved </span>
+                <!-- To remove the link back, buy a license please. -->
+                <span>Designed by <a href="https://ka-studio.dev"> KA-Studio.dev</a></span>
+          </div>
+        </div>
+    </footer>
+    </div>
+    <script src="js/splide.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.2.x/dist/index.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+    <script src="js/app.js" defer></script>
+
+  </body>
+</html>
