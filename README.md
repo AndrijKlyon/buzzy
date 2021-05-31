@@ -7,3 +7,4 @@ TailwindCSS and AlpineJS template
 # demo
 
 [Demo](https://ka-studio.dev/demo/2021/ka-buzzy)
+[Demo2](https://andrijklyon.github.io/buzzy/)
